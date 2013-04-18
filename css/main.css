@@ -1,0 +1,72 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background-color: #C3CDE7;
+	font-family: Tahoma;
+}
+
+#main-header {
+	margin: 0;
+	padding: 0%;
+	background-color: #3F5796;
+	padding-bottom: 1%;
+	margin-bottom: 3%;
+}
+
+#main-header h1 {
+	color: #FFFFFF;
+}
+
+#main-header nav {
+	
+}
+
+#main-header li {
+	list-style-type: none;
+	background-color: #999FAD;
+	color: #FFFFFF;
+	
+	
+	font-weight: bold;
+	font-size: 0.8em;
+	
+	float:right;
+	margin: 0 1.7%;
+    padding: 2px 2%;
+	margin-top: 1%;
+	
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+#main-header li:hover {
+	background-color: #BFB7A6;
+}
+section {
+	border: 3px outset #DEE4F3;
+	background-color: #D7DEF3;
+	width: 85%;
+	margin: 1%;
+	padding: 0.6em;
+	font-size: 1em;
+	padding-bottom: 0;
+}
+
+section h2 {
+	font-size: 1.7em;
+	margin-bottom: 0.4em;
+}
+
+section .posted {
+	margin-top: 1px;
+	font-weight: bold;
+	font-size: 0.8em;
+	float: left;
+}
+
+section .date {
+	font-size: 0.9em;
+}
