@@ -1,6 +1,6 @@
 $('#login').click(function() {
 	$(this).css('background-color', '');
-	$('li').unbind('hover');
+	$(this).off('mouseenter mouseleave');
 	$('#login-form').show();
 	
 });

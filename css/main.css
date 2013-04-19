@@ -16,6 +16,7 @@ body {
 	margin-bottom: 3%;
 }
 
+/* Blog Title */
 #main-header h1 {
 	color: #FFFFFF;
 }
@@ -39,9 +40,13 @@ body {
 	border-bottom-right-radius: 5px;
 }
 
+.nav-hover {
+	background-color: #92A6DB;
+}
+
 /* Login CSS */
 
-#login h3 {
+#login .header {
 	clear: both;
 	text-align: center;
 }
@@ -73,28 +78,31 @@ body {
 }
 
 #login-button {
+	display: inline;
+	border: 1px solid;
+	border-radius: 3px;
 	padding: 0.2em 2em;
 	background-color: #92A6DB;
 	margin: 0 auto;
-}
-
-.nav-hover {
-	background-color: #92A6DB;
 }
 
 #login-button:hover {
 	background-color: #B2C2ED;
 }
 
+article {
+	float: left;
+	width: 80%;
+}
+/* Blog Entry CSS */
 section {
 	border: 3px outset #DEE4F3;
 	background-color: #D7DEF3;
-	width: 85%;
 	margin: 1%;
 	padding: 0.6em;
 	font-size: 1em;
 	padding-bottom: 0;
-	box-shadow: 5px 5px 10px #000;
+	box-shadow: 2px 2px 10px #000;
 }
 
 section h2 {
@@ -104,7 +112,6 @@ section h2 {
 
 section .details {
 	font-size: 0.9em;
-	float: left;
 }
 
 section .highlight {
@@ -114,4 +121,70 @@ section .highlight {
 section hr {
 	clear: both;
 	margin: 0.5em 0;
+}
+
+section .comment {
+	margin-top: 0.7em;
+}
+
+section .errorMessage {
+	color: #FF0000;
+	margin-left: 0.7 em;
+	font-weight: bold;
+	font-size: 0.9em;
+}
+
+/* Recent Entries CSS */
+aside {
+	float: right;
+	width: 17%;
+	margin: 1%;
+	border: 3px outset #DEE4F3;
+	background-color: #D7DEF3;
+	box-shadow: 2px 2px 10px #000;
+}
+
+aside h2 {
+	text-align: center;
+}
+
+aside .date {
+	font-style:italic;
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
+aside a {
+	color: #000000;
+	font-weight: bold;
+	font-size: 0.9em;
+}
+
+aside a:hover {
+	color: #808080;
+}
+
+aside .blogEntry {
+	margin-left: 8px;
+	margin-bottom: 10px;
+}
+
+/* Editor CSS */
+#editor {
+	border: 3px outset #DEE4F3;
+	background-color: #D7DEF3;
+	box-shadow: 2px 2px 10px #000;
+	
+	width: 90%;
+	margin: 2em auto;
+	padding: 0.6em;
+}
+
+#editor label {
+	font-weight: bold;
+	display: block;
+}
+
+#editor #content {
+	width: 100%;
 }
