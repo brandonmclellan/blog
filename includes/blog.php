@@ -16,7 +16,6 @@
 			$this->publish_date = $publish_date;
 		}
 
-		
 		/**
 		 *	Public Getters
 		 */
@@ -55,7 +54,7 @@
 			// Fetch every blog and create class instance.
 			$blogs = array();
 			while($row = $sth->fetch(PDO::FETCH_ASSOC)) {
-				$blogs[] = new Blog($row['id'], $row['title'], $row['author_id'], $row['publish_date'], $row['contents']);
+				$blogs[] = new Blog($row['id'], $row['title'], $row['author_id'], $row['contents'], $row['publish_date']);
 			}
 			
 			return $blogs;

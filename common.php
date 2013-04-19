@@ -8,5 +8,9 @@
 	}
 	
 	// Include website classes
-	include "includes/blog.php";
+	require "includes/blog.php";
+	require "includes/user.php";
+	
+	// Start session tracking
+	session_start();
 ?>
