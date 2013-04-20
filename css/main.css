@@ -134,6 +134,11 @@ section .errorMessage {
 	font-size: 0.9em;
 }
 
+section h4 {
+	font-style: italic;
+	margin-left: 0.5em;
+}
+
 /* Recent Entries CSS */
 aside {
 	float: right;

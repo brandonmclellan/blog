@@ -1,5 +1,4 @@
 <?php
-
 	require "common.php";
 	
 	$user = (isset($_SESSION['user_id']) ? User::Retrieve($_SESSION['user_id']) : false);
@@ -9,6 +8,8 @@
 		header('Location: index.php');
 		die();
 	}
+	
+	
  ?>
  
 <!DOCTYPE html>

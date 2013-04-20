@@ -47,6 +47,10 @@
 			return date("F j, Y, g:i a", strtotime($this->publish_date));
 		}
 		
+		public function getDateTime() {
+			return new DateTime($this->publish_date);
+		}
+		
 		public function isCommentsClosed() {
 			return $this->closed;
 		}
@@ -58,12 +62,36 @@
 		/** Blog::retrieve($where='')
 		 *		Queries database for blog posts and returns results in array.
 		 */
-		public static function retrieve($where='') {
+		public static function retrieve($where=array(), $limit=1) {
 			global $db;
 			
-			// Pull blogs from database using passed filter.
-			$sql = 'SELECT b.id, b.author_id, u.name, b.title, b.publish_date, b.contents, b.closed FROM blogs AS b LEFT JOIN users AS u ON b.author_id = u.id ' . $where;
+			// Pull blog information including author name from database.
+			$sql = 'SELECT b.id, b.author_id, u.name, b.title, b.publish_date, b.contents, b.closed FROM blogs AS b LEFT JOIN users AS u ON b.author_id = u.id ';
+			
+			// Generates a WHERE clause based on given key=>value filters passed.
+			$addedWhere = false;
+			foreach($where as $key => $value) {
+				if (!$addedWhere) {
+					$sql .= ' WHERE ';
+					$addedWhere = true;
+				} else {
+					$sql .= ' AND ';
+				}
+				$sql .= 'b.' . $key . ' = :' . $key . ' ';
+			}
+			
+			// Always sort by latest post, limit is always added.
+			$sql .= 'ORDER BY publish_date DESC LIMIT ' . (int)$limit;
+		
+			// Pass entire SQL string to be prepared
 			$sth = $db->prepare($sql);
+			
+			// Bind values from where clause to ensure proper escaping.
+			foreach($where as $key => $value) {
+				$sth->bindValue(':' . $key, $value);
+			}
+			
+			// Bind limit to query and execute
 			$sth->execute();
 			
 			// Fetch every blog and create class instance.
@@ -72,7 +100,13 @@
 				$blogs[] = new Blog($row['id'], $row['title'], $row['author_id'], $row['name'], $row['contents'], $row['publish_date'], $row['closed']);
 			}
 			
-			return $blogs;
+			// If there is a potential for multiple blogs, return array.
+			if ($limit > 1) {
+				return $blogs;
+			}
+				
+			// If there is only ever going to be one blog, pass blog itself rather then array.
+			return( count($blogs) > 0) ? $blogs[0] : false;
 		}
 	}
 ?>
