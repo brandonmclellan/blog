@@ -10,6 +10,8 @@
 		die("Unable to connect to database: " . $e->getMessage());
 	}
 	
+	date_default_timezone_set('America/New_York');
+	
 	// reCAPTCHA library
 	require "includes/recaptchalib.php";
 	

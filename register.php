@@ -91,5 +91,6 @@
 				<input type="submit" name="submit" id="submit" value="Register Account" class="button" />
 			</form>
 		</div>
+		<script src="js/login-box.js"></script>
 	</body>
 </html>

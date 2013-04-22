@@ -154,7 +154,7 @@
 					foreach($recent_entries as $entries): ?>
 				<div class="blogEntry">
 					<a href="index.php?id=<?=$entries->getId();?>"><?=$entries->getTitle(); ?></a><br />
-					by <a href="profile.php?id=<?=$entries->getAuthorId();?>"><?=$entries->getAuthorName();?></a> at 8:21pm
+					by <a href="profile.php?id=<?=$entries->getAuthorId();?>"><?=$entries->getAuthorName();?></a> at <br /> <?=$entries->getPublishDate(); ?>
 				</div>
 			<?php 	endforeach;
 				   else: ?>

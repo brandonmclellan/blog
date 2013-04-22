@@ -18,7 +18,7 @@
 	}
 	
 	// Check if user has submitted new blog entry.
-	if (isset($_POST['entryTitle'], $_POST['content'], $_POST['closeComments'], $_POST['recaptcha_challenge_field'], $_POST['recaptcha_response_field'])) {
+	if (isset($_POST['entryTitle'], $_POST['content'], $_POST['recaptcha_challenge_field'], $_POST['recaptcha_response_field'])) {
 		if (!Blog::Post($_POST['entryTitle'], $_POST['content'], $_POST['closeComments'], $_POST['recaptcha_challenge_field'], $_POST['recaptcha_response_field'])) {
 			$captcha_failed = true;
 		} else {
@@ -63,7 +63,7 @@
 			<hr>
 			<form action="editor.php" method="POST">
 				<label for="entryTitle">Entry Title: </label>
-				<input type="input" name="entryTitle" id="entryTitle" size="150" value="<?php echo (isset($_POST['entryTitle']) ? htmlspecialchars($_POST['entryTitle']) : ''); ?>" required/><br />
+				<input type="input" name="entryTitle" id="entryTitle" size="100" value="<?php echo (isset($_POST['entryTitle']) ? htmlspecialchars($_POST['entryTitle']) : ''); ?>" required/><br />
 				<label for="entryPost">Entry Contents: </label>
 				<textarea name="content"><?php echo (isset($_POST['content']) ? htmlspecialchars ($_POST['content']) : ''); ?></textarea>
 				<input type="checkbox" name="closeComments" id="closeComments" value="true" /><label for="closeComments">Disable Commenting</label>
