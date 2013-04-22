@@ -24,16 +24,17 @@
 	// Retrieve logged-in users information
 	$user = (isset($_SESSION['user_id']) ? User::Retrieve($_SESSION['user_id']) : false);
 	
+	$blog = null;
 	// Check if request is for specific blog entry.
 	if (isset($_GET['id'])) {
 		$blog = Blog::Retrieve(array('id' => $_GET['id']), 1);
 	// Show latest entry from user if logged in.
 	} else if (isset($_SESSION['user_id'])) {
 		$blog = Blog::Retrieve(array('author_id' => $_SESSION['user_id']), 1);
-	} else {
-	// Show latest global entry if not logged in.
-		$blog = Blog::Retrieve();
 	}
+	
+	if (!$blog)
+		$blog = Blog::Retrieve();
 	
 	$comments = $blog->getComments();
 	
@@ -51,7 +52,7 @@
 	</head>
 	<body>
 		<div id="main-header">
-			<h1>Blog Title</h1>
+			<a class="title" href="index.php">Blogging Site</a>
 			
 			<nav>
 				<?php if ($user): ?>
@@ -79,10 +80,13 @@
 							<?php endif; ?>
 								<label for="email">Email Address: </label><input type="text" name="email" id="email" /><div class="clear"></div>
 								<label for="password">Password: </label><input type="password" name="password" id="password" /><div class="clear"></div>
-								<input type="submit" id="login-button" value="Login" />
+								<input type="submit" id="login-button" class="button" value="Login" />
 						</form>
 					</div>
 				</li>
+				<a href="register.php">
+					<li id="register-button">Register</li>
+				</a>
 				<?php endif; ?>
 			</nav>
 		</div>
@@ -93,7 +97,7 @@
 					<h2><?=$blog->getTitle();?></h2>
 					<div class="details">By <span class="highlight"><?=$blog->getAuthorName();?></span> posted <span class="highlight"><?=$blog->getPublishDate();?></span></div>
 					<hr />
-					<div class="content"><?=$blog->getContents();?></div>
+					<div class="content"><?= html_entity_decode($blog->getContents());?></div>
 					<hr>
 				</div>
 				<!-- Comment Section -->

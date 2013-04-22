@@ -36,6 +36,56 @@
 			return new User($info['id'], $info['email'], $info['name']);
 		}
 		
+		public static function Register($email, $password, $username, $recaptcha_challenge, $recaptcha_response) {
+			global $db;
+			
+			$errors = array();
+			
+			if (strlen($username) == 0) {
+				$errors[] = 'You must enter a username.';
+			}
+			
+			// Check password length requirements
+			if (strlen($password) < 2) {
+				$errors[] = 'You must enter a password at least 2 characters long.';
+			}
+			
+			// Check email validity.
+			if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+				$errors[] = 'Entered email is invalid.';
+			}
+			
+			// Query for email to see if it already exists
+			$eth = $db->prepare('SELECT email FROM users WHERE email LIKE ?');
+			$eth->bindValue(1, $email);
+			$eth->execute();
+			
+			// Check if the email exists.
+			if ($eth->fetch()) {
+				$errors[] = 'Email address already exists in system.';
+			}
+			
+			// Check recaptcha
+			$resp = recaptcha_check_answer (PRIVATEKEY,
+                                $_SERVER["REMOTE_ADDR"],
+                                $recaptcha_challenge,
+                                $recaptcha_response);
+								
+			if (!$resp->is_valid)
+				$errors[] = 'Captcha is invalid.';
+				
+			if (count($errors) > 0)
+				return $errors;
+				
+			$sth = $db->prepare('INSERT INTO users(email, password, name) VALUES (?, ?, ?);');
+			$sth->bindValue(1, $email);
+			$sth->bindValue(2, md5($password));
+			$sth->bindValue(3, $username);
+			$sth->execute();
+			print($sth->errorInfo());
+			return $errors;
+		}
+		
 		public static function Authenticate($email, $password) {
 			global $db;
 			

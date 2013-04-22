@@ -1,5 +1,11 @@
 <?php
-	
+	/**
+	 *	Filename: blog.php
+	 *	Author Name:	Brandon McLellan
+	 *	Website Name:	Blogging Site
+	 *	Description:
+	 *		Handles all aspects of retrieving and posting blogs within the site.
+	 */
 	class Blog {
 		private $id;
 		private $title;
@@ -59,7 +65,44 @@
 			return Comment::Retrieve($this->id);		
 		}
 		
-		/** Blog::retrieve($where='')
+		/** Blog::post($title, $contents, $closed, $recaptcha_challenge, $recaptcha_response)
+		 *		Verifies the content from the web and inserts into the database.
+		 */
+		public static function post($title, $contents, $closed, $recaptcha_challenge, $recaptcha_response) {
+			global $db;
+			
+			// Check to ensure user is logged in.
+			if (!isset($_SESSION['user_id'])) {
+				return false;
+			}
+			
+			// Make sure the title and contents aren't empty.
+			if (!strlen($title) || !strlen($contents)) {
+				return false;
+			}
+			
+			// Check CAPTCHA response validity.
+			$resp = recaptcha_check_answer (PRIVATEKEY,
+                                $_SERVER["REMOTE_ADDR"],
+                                $recaptcha_challenge,
+                                $recaptcha_response);
+								
+			if (!$resp->is_valid) {
+				return false;
+			}
+				
+			$sql = "INSERT INTO blogs(author_id, title, publish_date, contents, closed) VALUES(?, ?, NOW(), ?, ?);";
+			$sth = $db->prepare($sql);
+			$sth->bindValue(1, $_SESSION['user_id'], PDO::PARAM_INT);
+			$sth->bindValue(2, htmlspecialchars($title), PDO::PARAM_STR);
+			$sth->bindValue(3, htmlspecialchars($contents), PDO::PARAM_STR);
+			$sth->bindValue(4, $closed, PDO::PARAM_BOOL);
+			
+			$sth->execute();
+			return $sth->execute();
+		}
+		
+		/** Blog::retrieve($where=array(), $limit=1)
 		 *		Queries database for blog posts and returns results in array.
 		 */
 		public static function retrieve($where=array(), $limit=1) {

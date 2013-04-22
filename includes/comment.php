@@ -54,8 +54,8 @@
 			}
 			
 			// Check to ensure blog id is valid and is open for comments.
-			$blog = Blog::retrieve('WHERE b.id = ' . (int)$blog_id);
-			if (count($blog) == 0 || $blog[0]->isCommentsClosed()) {
+			$blog = Blog::retrieve(array('id' => $blog_id), 1);
+			if ($blog == null || $blog->isCommentsClosed()) {
 				return false;
 			}
 			
@@ -72,7 +72,7 @@
 			$sth = $db->prepare($sql);
 			$sth->bindValue(1, $_SESSION['user_id'], PDO::PARAM_INT);
 			$sth->bindValue(2, $blog_id, PDO::PARAM_INT);
-			$sth->bindValue(3, htmlentities($comment));
+			$sth->bindValue(3, htmlspecialchars($comment));
 			
 			return $sth->execute();
 		}
