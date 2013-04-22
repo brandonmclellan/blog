@@ -1,4 +1,12 @@
 <?php
+	/** 
+	 *	Filename: editor.php
+	 *	Author Name:	Brandon McLellan
+	 *	Website Name:	Blogging Site
+	 *	Description:
+	 *		- Handles passing new blog data to blog.php
+	 *		- HTML page for creating new blog entry posts.
+	 */
 	require "common.php";
 	
 	$user = (isset($_SESSION['user_id']) ? User::Retrieve($_SESSION['user_id']) : false);
@@ -9,10 +17,12 @@
 		die();
 	}
 	
+	// Check if user has submitted new blog entry.
 	if (isset($_POST['entryTitle'], $_POST['content'], $_POST['closeComments'], $_POST['recaptcha_challenge_field'], $_POST['recaptcha_response_field'])) {
-		if (!Blog::post($_POST['entryTitle'], $_POST['content'], $_POST['closeComments'], $_POST['recaptcha_challenge_field'], $_POST['recaptcha_response_field'])) {
+		if (!Blog::Post($_POST['entryTitle'], $_POST['content'], $_POST['closeComments'], $_POST['recaptcha_challenge_field'], $_POST['recaptcha_response_field'])) {
 			$captcha_failed = true;
 		} else {
+			// If successful, redirect to index where it will be shown.
 			header('Location: index.php');
 			die();
 		}

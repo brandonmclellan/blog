@@ -1,4 +1,11 @@
 <?php
+	/**
+	 *	Filename: comment.php
+	 *	Author Name:	Brandon McLellan
+	 *	Website Name:	Blogging Site
+	 *	Description:
+	 *		Handles all aspects of retrieving and posting comments within the site.
+	 */
 	class Comment {
 		private $id;
 		private $author_id;
@@ -7,6 +14,7 @@
 		private $publish_date;
 		private $comment;
 		
+		// Private constructor used by the retriever.
 		protected function __construct($id, $author_id, $author_name, $blog_id, $publish_date, $comment) {
 			$this->id = $id;
 			$this->author_id = $author_id;
@@ -16,6 +24,7 @@
 			$this->comment = $comment;
 		}
 		
+		// Public getters
 		public function getId() {
 			return $this->id;
 		}
@@ -40,6 +49,9 @@
 			return $this->comment;
 		}
 		
+		/** Comment::Post($blog_id, $comment, $recaptcha_challenge, $recaptcha_response)
+		 *		Verifies all data from HTML form and submits to the database.
+		 */
 		static public function Post($blog_id, $comment, $recaptcha_challenge, $recaptcha_response) {
 			global $db;
 			
@@ -77,14 +89,19 @@
 			return $sth->execute();
 		}
 		
+		/** Comment::Retrieve($blog_id)
+		 *		Pulls comments for a given blog from the database.
+		 */
 		static public function Retrieve($blog_id) {
 			global $db;
 			
+			// Query database for comments
 			$sql = 'SELECT c.id, c.author_id, u.name, c.blog_id, c.publish_date, c.comment FROM comments AS c LEFT JOIN users AS u ON c.author_id = u.id WHERE blog_id = ? ORDER BY publish_date DESC;';
 			$sth = $db->prepare($sql);
 			$sth->bindValue(1, $blog_id, PDO::PARAM_INT);
 			$sth->execute();
 			
+			// Insert every comment into an array.
 			$comments = array();
 			while($comment = $sth->fetch(PDO::FETCH_ASSOC)) {
 				$comments[] = new Comment($comment['id'], $comment['author_id'], $comment['name'], $comment['blog_id'], $comment['publish_date'], $comment['comment']);

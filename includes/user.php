@@ -1,15 +1,24 @@
 <?php
+	/**
+	 *	Filename: user.php
+	 *	Author Name:	Brandon McLellan
+	 *	Website Name:	Blogging Site
+	 *	Description:
+	 *		Handles all aspects of authentication, registration and retrival for users.
+	 */
 	class User {
 		private $id;
 		private $email;
 		private $name;
 		
-		public function __construct($id, $email, $name) {
+		// Protected constructor called by Retrieve
+		protected function __construct($id, $email, $name) {
 			$this->id = $id;
 			$this->email = $email;
 			$this->name = $name;
 		}
 		
+		// Public Getters
 		public function getId() {
 			return $this->id;
 		}
@@ -22,9 +31,13 @@
 			return $this->name;
 		}
 		
+		/** User::Retrieve($user_id)
+		 *		Queries database for given user id and returns user class.
+		 */
 		public static function Retrieve($user_id) {
 			global $db;
 			
+			// Query for user
 			$sth = $db->prepare('SELECT id, email, name FROM users WHERE id = ?');
 			$sth->bindValue(1, $user_id);
 			$sth->execute();
@@ -33,9 +46,13 @@
 			if (!$info)
 				return false;
 			
+			// Create new User instance and return it.
 			return new User($info['id'], $info['email'], $info['name']);
 		}
 		
+		/**	User::Register($email, $password, $username, $recaptcha_challenge, $recaptcha_response)
+		 *		Verifies all information from user and creates new user account.
+		 */
 		public static function Register($email, $password, $username, $recaptcha_challenge, $recaptcha_response) {
 			global $db;
 			
@@ -82,10 +99,12 @@
 			$sth->bindValue(2, md5($password));
 			$sth->bindValue(3, $username);
 			$sth->execute();
-			print($sth->errorInfo());
 			return $errors;
 		}
 		
+		/** User::Authenticate($email, $password)
+		 *		Checks user's credinatals against database and authenticates if successful.
+		 */
 		public static function Authenticate($email, $password) {
 			global $db;
 			
@@ -106,6 +125,9 @@
 			return new User($info['id'], $info['email'], $info['name']);
 		}
 		
+		/** User::Logout()
+		 *		Destroys users session and logs them out.
+		 */
 		public static function Logout() {
 			// Simply unset the user id from session which is used to track login state.
 			if (isset($_SESSION['user_id']))

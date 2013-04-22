@@ -1,11 +1,24 @@
 <?php
+	/** 
+	 *	Filename: register.php
+	 *	Author Name:	Brandon McLellan
+	 *	Website Name:	Blogging Site
+	 *	Description:
+	 *		- Handles passing registration data to user.php
+	 *		- HTML page for registering new users.
+	 */
 	require "common.php";
 	
+	// Check if user is logged in already, if so redirect.
+	if (isset($_SESSION['user_id'])) {
+		header('Location: index.php');
+		die();
+	}
+	
+	// Check if user has submitted new registration.
 	if (isset($_POST['emailAddress'], $_POST['register_password'], $_POST['confirm_password'], $_POST['username'])) {
 		$errors = User::Register($_POST['emailAddress'], $_POST['register_password'], $_POST['username'], $_POST['recaptcha_challenge_field'], $_POST['recaptcha_response_field']);
-		print_r($errors);
 		if (count($errors) == 0) {
-			User::Authenticate($_POST['emailAddress'], $_POST['password']);
 			header('Location: index.php');
 		}
 	}

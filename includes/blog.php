@@ -65,10 +65,32 @@
 			return Comment::Retrieve($this->id);		
 		}
 		
+		/** Blog::CloseComments($blog_id)
+		 *		Closes comments for given blog.
+		 */
+		public static function CloseComments($blog_id) {
+			global $db;
+			
+			$blog = Blog::Retrieve(array('id' => $blog_id), 1);
+			
+			// Verify blog exists and user is logged in.
+			if (!$blog || !isset($_SESSION['user_id']))
+				return false;
+				
+			// Verify person logged in is closing comments.
+			if ($blog->getAuthorId() != $_SESSION['user_id'])
+				return false;
+				
+			// Update database to reflect the comments being closed.
+			$sth = $db->prepare('UPDATE blogs SET closed = 1 WHERE id = ?;');
+			$sth->bindValue(1, $blog_id);
+			return $sth->execute();
+		}
+		
 		/** Blog::post($title, $contents, $closed, $recaptcha_challenge, $recaptcha_response)
 		 *		Verifies the content from the web and inserts into the database.
 		 */
-		public static function post($title, $contents, $closed, $recaptcha_challenge, $recaptcha_response) {
+		public static function Post($title, $contents, $closed, $recaptcha_challenge, $recaptcha_response) {
 			global $db;
 			
 			// Check to ensure user is logged in.
@@ -105,7 +127,7 @@
 		/** Blog::retrieve($where=array(), $limit=1)
 		 *		Queries database for blog posts and returns results in array.
 		 */
-		public static function retrieve($where=array(), $limit=1) {
+		public static function Retrieve($where=array(), $limit=1) {
 			global $db;
 			
 			// Pull blog information including author name from database.

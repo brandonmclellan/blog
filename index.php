@@ -1,4 +1,12 @@
 <?php
+	/** 
+	 *	Filename: index.php
+	 *	Author Name:	Brandon McLellan
+	 *	Website Name:	Blogging Site
+	 *	Description:
+	 *		- Handles passing POST/GET requests to revelvant functions.
+	 *		- Main HTML page with blog post, comments and login.
+	 */
 	require 'common.php';
 
 	//Check if there is a login request and we aren't already logged in.
@@ -14,6 +22,11 @@
 		if (!Comment::Post($_POST['blog_id'], $_POST['comment'], $_POST['recaptcha_challenge_field'], $_POST['recaptcha_response_field'])) {
 			$captcha_fail = true;
 		}
+	}
+	
+	// Check if author is closing comments
+	if (isset($_GET['action'], $_GET['id'])) {
+		Blog::CloseComments($_GET['id']);
 	}
 	
 	// Check for logout.
@@ -59,9 +72,6 @@
 					<a href="index.php?logout=true">
 						<li id="logout">Logout</li>
 					</a>
-					<a href="profile.php">
-						<li id="profile">Profile</li>
-					</a>
 					<a href="editor.php">
 						<li id="post">Create new Entry</li>
 					</a>
@@ -103,6 +113,11 @@
 				<!-- Comment Section -->
 				<div id="comments">
 					<?php if (!$blog->isCommentsClosed() && $user): ?>
+						<?php if ($user->getId() == $blog->getAuthorId()): ?>
+							<div id="closeComments">
+								<a href="index.php?action=closecomments&id=<?= $blog->getId(); ?>" class="button">Close Comments</a>
+							</div>
+						<?php endif; ?>
 						<!-- Posting Comment Section -->
 						<h3>Post Comment</h3>
 						<?php if (isset($captcha_fail)): ?>

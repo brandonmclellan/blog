@@ -101,6 +101,7 @@ article {
 	float: left;
 	width: 80%;
 }
+
 /* Blog Entry CSS */
 section {
 	border: 3px outset #DEE4F3;
@@ -132,6 +133,17 @@ section hr {
 
 section .comment {
 	margin-top: 0.7em;
+}
+
+
+#closeComments {
+	margin: 0 auto;
+	width: 20%;
+}
+
+#closeComments a {
+	color: #000000;
+	text-decoration: none;
 }
 
 section .errorMessage {
